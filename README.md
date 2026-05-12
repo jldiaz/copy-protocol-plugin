@@ -19,5 +19,5 @@ Note: Remember to URL-encode your text (e.g., use `%20` instead of spaces).
 You can install this plugin via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
 1. Open the BRAT settings in Obsidian.
 2. Click "Add Beta plugin".
-3. Paste the repository URL: `jldiaz/obsidian-copy-protocol-plugin`.
+3. Paste the repository URL: `jldiaz/copy-protocol-plugin`.
 4. Enable the plugin in your Community Plugins list.
