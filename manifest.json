@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-copy-protocol",
+	"name": "Copy Protocol",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Adds support for copying text to the clipboard using an obsidian://copy?text=... protocol.",
+	"author": "jldiaz",
+	"authorUrl": "",
+	"isDesktopOnly": false
+}
