@@ -1,6 +1,6 @@
 {
-	"id": "copy-protocol",
-	"name": "Copy Protocol",
+	"id": "copy-text-protocol",
+	"name": "Copy Text Protocol",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Adds support for copying text to the clipboard using a custom protocol.",
