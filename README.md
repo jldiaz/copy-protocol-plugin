@@ -1,5 +1,7 @@
 # Obsidian Copy Protocol Plugin
 
+![Plugin Demo](demo.gif)
+
 This is a simple plugin for Obsidian that registers a custom `obsidian://copy` protocol.
 It allows you to create internal links that, when clicked, will silently copy a specific text to your clipboard without opening any external applications or showing popups.
 
