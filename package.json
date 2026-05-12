@@ -1,6 +1,6 @@
 {
 	"name": "copy-text-protocol",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A plugin that adds support for copying text via a custom protocol.",
 	"main": "main.js",
 	"type": "module",
