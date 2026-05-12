@@ -1,7 +1,7 @@
 {
 	"name": "copy-protocol",
 	"version": "1.0.0",
-	"description": "An Obsidian plugin that adds support for copying text via an obsidian://copy?text=... protocol.",
+	"description": "A plugin that adds support for copying text via a custom protocol.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
