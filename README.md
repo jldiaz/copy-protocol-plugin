@@ -1,4 +1,4 @@
-# Obsidian Copy Protocol Plugin
+# Copy Text Protocol
 
 ![Plugin Demo](demo.gif)
 
