@@ -9,25 +9,16 @@ import {
 } from '@codemirror/view';
 import { RangeSetBuilder } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
+import { SyntaxNodeRef } from '@lezer/common';
 
 class CopyIconWidget extends WidgetType {
 	constructor(private textToCopy: string) { super(); }
 
 	toDOM(): HTMLElement {
-		const span = document.createElement('span');
+		const span = activeDocument.createElement('span');
 		span.className = 'copy-protocol-icon';
-		span.style.cursor = 'copy';
-		span.style.display = 'inline-flex';
-		span.style.marginLeft = '5px';
-		span.style.verticalAlign = 'middle';
-		span.style.opacity = '0.8';
 		
 		setIcon(span, 'copy');
-		const svg = span.querySelector('svg');
-		if (svg) {
-			svg.style.width = '0.85em';
-			svg.style.height = '0.85em';
-		}
 
 		span.onclick = async (e) => {
 			e.preventDefault();
@@ -35,15 +26,12 @@ class CopyIconWidget extends WidgetType {
 			try {
 				await navigator.clipboard.writeText(this.textToCopy);
 				new Notice('Copied to clipboard!');
-				span.style.transform = 'scale(1.2)';
-				setTimeout(() => span.style.transform = 'scale(1)', 200);
-			} catch (err) {
+				span.addClass('is-clicked');
+				window.setTimeout(() => span.removeClass('is-clicked'), 200);
+			} catch {
 				new Notice('Failed to copy.');
 			}
 		};
-
-		span.onmouseenter = () => span.style.opacity = '1';
-		span.onmouseleave = () => span.style.opacity = '0.8';
 
 		return span;
 	}
@@ -73,7 +61,7 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 			tree.iterate({
 				from,
 				to,
-				enter(node: any) {
+				enter(node: SyntaxNodeRef) {
 					if (!node.name.includes('string_url')) return;
 					const urlText = view.state.doc.sliceString(node.from, node.to);
 					if (!urlText.includes('obsidian://copy')) return;
@@ -90,11 +78,11 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 
 					if (!textToCopy) return;
 
-					let labelNode = null;
+					let labelNode: SyntaxNodeRef | null = null;
 					let curr = node.node.prevSibling;
 					for (let i = 0; i < 6 && curr; i++) {
 						if (curr.name.includes('link') && !curr.name.includes('formatting')) {
-							labelNode = curr;
+							labelNode = curr as unknown as SyntaxNodeRef;
 							break;
 						}
 						curr = curr.prevSibling;
@@ -111,7 +99,7 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 						
 						if (!isEditing) {
 							builder.add(labelNode.to, labelNode.to, Decoration.widget({
-								widget: new CopyIconWidget(textToCopy as any),
+								widget: new CopyIconWidget(textToCopy),
 								side: 1
 							}));
 						}

@@ -48,3 +48,27 @@ a[href^="obsidian://copy"]:hover::after {
 a[href^="obsidian://copy"]:hover {
     cursor: copy !important;
 }
+
+/* ── Widget Styles (Live Preview) ── */
+
+.copy-protocol-icon {
+    cursor: copy;
+    display: inline-flex;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.8;
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.copy-protocol-icon:hover {
+    opacity: 1;
+}
+
+.copy-protocol-icon svg {
+    width: 0.85em;
+    height: 0.85em;
+}
+
+.copy-protocol-icon.is-clicked {
+    transform: scale(1.2);
+}
