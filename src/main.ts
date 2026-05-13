@@ -73,7 +73,7 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 			tree.iterate({
 				from,
 				to,
-				enter(node) {
+				enter(node: any) {
 					if (!node.name.includes('string_url')) return;
 					const urlText = view.state.doc.sliceString(node.from, node.to);
 					if (!urlText.includes('obsidian://copy')) return;
