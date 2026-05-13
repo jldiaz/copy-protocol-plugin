@@ -2,22 +2,63 @@
 
 ![Plugin Demo](demo.gif)
 
-This is a simple plugin for Obsidian that registers a custom `obsidian://copy` protocol.
-It allows you to create internal links that, when clicked, will silently copy a specific text to your clipboard without opening any external applications or showing popups.
+## What is this for?
 
-## Usage
+Have you ever wanted to create a note that, when you click a link, **automatically copies a snippet of text to your clipboard**? This plugin makes that possible.
 
-Create a link using the following format:
-`[Link text](obsidian://copy?text=Your%20text%20here)`
+Some use cases:
 
-When you click the link, "Your text here" will be copied to your clipboard, and a small notice will appear to confirm the action.
+- A "cheat sheet" note with commands, passwords, or templates — click the link, paste anywhere.
+- A collection of code snippets ready to paste into a terminal.
+- Frequently used texts (email signatures, boilerplate, addresses) accessible from any note.
+- Query strings to paste into other apps (e.g. to search specific emails in Outlook, my primary use case)
 
-Note: Remember to URL-encode your text (e.g., use `%20` instead of spaces).
+## How it works
+
+The plugin registers a custom `obsidian://copy` protocol. When you click a link using this protocol, the text embedded in the URL is silently copied to your clipboard and a small confirmation notice appears — no popups, no external apps.
+
+## Creating links manually
+
+```markdown
+[Click to copy](obsidian://copy?text=Your-text-here)
+```
+
+When clicked, **"Your-text-here"** is copied to your clipboard.
+
+For text containing spaces, wrap the URL in angle brackets:
+
+```markdown
+[Click to copy](<obsidian://copy?text=Hello world>)
+```
+
+Other special characters need to be encoded, and as you can see it can be tedious to do manually, so a command for that is included.
+
+## Creating links with a keyboard shortcut
+
+The plugin includes a command called **Copy Protocol: Paste clipboard as copy-protocol link** that automates the process. It reads your current clipboard content and inserts a ready-to-use markdown link at the cursor. If you have text selected in the editor, that selection becomes the link label; otherwise, the clipboard text itself is used as a label.
+
+### To assign a keyboard shortcut
+
+1. Open **Settings → Hotkeys**.
+2. Search for "Paste clipboard as copy-protocol link".
+3. Click the `+` button and press your preferred key combination.
+
+### Example workflow
+
+1. Copy a command or text you want to reuse (e.g. `git log --oneline`).
+2. In your note, type a label like `Show git log` and select it.
+3. Press your hotkey.
+4. The selection is replaced with:
+   ```
+   [Show git log](<obsidian://copy?text=git%20log%20--oneline>)
+   ```
+5. Clicking that link copies `git log --oneline` to your clipboard instantly.
 
 ## Installation
 
-You can install this plugin via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+You can install this plugin from the Community Plugins settings of Obsidian, or via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+
 1. Open the BRAT settings in Obsidian.
-2. Click "Add Beta plugin".
+2. Click **Add Beta plugin**.
 3. Paste the repository URL: `jldiaz/copy-protocol-plugin`.
 4. Enable the plugin in your Community Plugins list.
