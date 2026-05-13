@@ -58,54 +58,59 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 			const { from, to } = view.viewport;
 			const selection = view.state.selection;
 
-			tree.iterate({
-				from,
-				to,
-				enter(node: SyntaxNodeRef) {
-					if (!node.name.includes('string_url')) return;
-					const urlText = view.state.doc.sliceString(node.from, node.to);
-					if (!urlText.includes('obsidian://copy')) return;
+			for (const { from: lFrom, to: lTo } of view.visibleRanges) {
+				tree.iterate({
+					from: lFrom,
+					to: lTo,
+					enter(node: SyntaxNodeRef) {
+						if (!node.name.includes('string_url')) return;
+						const urlText = view.state.doc.sliceString(node.from, node.to);
+						if (!urlText.includes('obsidian://copy')) return;
 
-					let textToCopy = '';
-					try {
-						const cleanUrl = urlText.startsWith('<') ? urlText.slice(1, -1) : urlText;
-						const url = new URL(cleanUrl);
-						textToCopy = url.searchParams.get('text') ?? '';
-					} catch {
-						const match = urlText.match(/[?&]text=([^&> ]+)/);
-						textToCopy = (match && match[1]) ? decodeURIComponent(match[1]) : '';
-					}
-
-					if (!textToCopy) return;
-
-					let labelNode: SyntaxNodeRef | null = null;
-					let curr = node.node.prevSibling;
-					for (let i = 0; i < 6 && curr; i++) {
-						if (curr.name.includes('link') && !curr.name.includes('formatting')) {
-							labelNode = curr as unknown as SyntaxNodeRef;
-							break;
+						let textToCopy = '';
+						try {
+							const cleanUrl = urlText.startsWith('<') ? urlText.slice(1, -1) : urlText;
+							const url = new URL(cleanUrl);
+							textToCopy = url.searchParams.get('text') ?? '';
+						} catch {
+							const match = urlText.match(/[?&]text=([^&> ]+)/);
+							textToCopy = (match && match[1]) ? decodeURIComponent(match[1]) : '';
 						}
-						curr = curr.prevSibling;
-					}
 
-					if (labelNode) {
-						// Hide widget if cursor is anywhere near the link structure
-						// (from the start of label to the end of the URL)
-						const linkStart = labelNode.from - 1; // accounting for '['
-						const linkEnd = node.to + 1;         // accounting for ')'
-						const isEditing = selection.ranges.some(r => r.from <= linkEnd && r.to >= linkStart);
+						if (!textToCopy) return;
 
-						builder.add(labelNode.from, labelNode.to, Decoration.mark({ class: 'copy-protocol-link' }));
-						
-						if (!isEditing) {
-							builder.add(labelNode.to, labelNode.to, Decoration.widget({
-								widget: new CopyIconWidget(textToCopy),
-								side: 1
-							}));
+						let labelNode: SyntaxNodeRef | null = null;
+						let curr = node.node.prevSibling;
+						for (let i = 0; i < 6 && curr; i++) {
+							if (curr.name.includes('link') && !curr.name.includes('formatting')) {
+								labelNode = curr as unknown as SyntaxNodeRef;
+								break;
+							}
+							curr = curr.prevSibling;
 						}
-					}
-				},
-			});
+
+						if (labelNode) {
+							// Mark the line to hide external link icons via CSS
+							const line = view.state.doc.lineAt(node.from);
+							builder.add(line.from, line.from, Decoration.line({ class: 'has-copy-protocol-line' }));
+
+							// Hide widget if cursor is anywhere near the link structure
+							const linkStart = labelNode.from - 1;
+							const linkEnd = node.to + 1;
+							const isEditing = selection.ranges.some(r => r.from <= linkEnd && r.to >= linkStart);
+
+							builder.add(labelNode.from, labelNode.to, Decoration.mark({ class: 'copy-protocol-link' }));
+							
+							if (!isEditing) {
+								builder.add(labelNode.to, labelNode.to, Decoration.widget({
+									widget: new CopyIconWidget(textToCopy),
+									side: 1
+								}));
+							}
+						}
+					},
+				});
+			}
 			return builder.finish();
 		}
 	},
