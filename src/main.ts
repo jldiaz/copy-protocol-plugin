@@ -55,7 +55,6 @@ const copyLinkPlugin = ViewPlugin.fromClass(
 		buildDecorations(view: EditorView): DecorationSet {
 			const builder = new RangeSetBuilder<Decoration>();
 			const tree = syntaxTree(view.state);
-			const { from, to } = view.viewport;
 			const selection = view.state.selection;
 
 			for (const { from: lFrom, to: lTo } of view.visibleRanges) {
