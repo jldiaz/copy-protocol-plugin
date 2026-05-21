@@ -8,12 +8,16 @@
  * We target the same pseudo-element Obsidian uses (::after) but with higher 
  * specificity to override it completely without !important.
  */
+.markdown-rendered a.copy-protocol-link,
+.markdown-preview-view a.copy-protocol-link,
 .markdown-rendered a.external-link[href^="obsidian://copy"],
 .markdown-preview-view a.external-link[href^="obsidian://copy"] {
     background-image: none;
     padding-inline-end: 0;
 }
 
+.markdown-rendered a.copy-protocol-link::after,
+.markdown-preview-view a.copy-protocol-link::after,
 .markdown-rendered a.external-link[href^="obsidian://copy"]::after,
 .markdown-preview-view a.external-link[href^="obsidian://copy"]::after {
     content: "";
@@ -33,6 +37,8 @@
     opacity: 0.8;
 }
 
+.markdown-rendered a.copy-protocol-link:hover::after,
+.markdown-preview-view a.copy-protocol-link:hover::after,
 .markdown-rendered a.external-link[href^="obsidian://copy"]:hover::after,
 .markdown-preview-view a.external-link[href^="obsidian://copy"]:hover::after {
     opacity: 1;
@@ -42,7 +48,11 @@
 .markdown-rendered a[href^="obsidian://copy"] .external-link,
 .markdown-rendered a[href^="obsidian://copy"] + .external-link,
 .markdown-preview-view a[href^="obsidian://copy"] .external-link,
-.markdown-preview-view a[href^="obsidian://copy"] + .external-link {
+.markdown-preview-view a[href^="obsidian://copy"] + .external-link,
+.markdown-rendered a.copy-protocol-link .external-link,
+.markdown-rendered a.copy-protocol-link + .external-link,
+.markdown-preview-view a.copy-protocol-link .external-link,
+.markdown-preview-view a.copy-protocol-link + .external-link {
     display: none;
 }
 
@@ -65,7 +75,8 @@
 
 /* Copy cursor on hover */
 .markdown-source-view.mod-cm6 .copy-protocol-link:hover,
-.markdown-source-view.mod-cm6 a[href^="obsidian://copy"]:hover {
+.markdown-source-view.mod-cm6 a[href^="obsidian://copy"]:hover,
+a.copy-protocol-link:hover {
     cursor: copy;
 }
 
@@ -93,3 +104,34 @@
 .copy-protocol-icon.is-clicked {
     transform: scale(1.2);
 }
+
+/* ── Custom Premium Tooltip ── */
+
+.copy-protocol-tooltip {
+    position: absolute;
+    z-index: 10000;
+    background-color: var(--background-tooltip, var(--background-secondary-alt, #303030));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--text-normal);
+    border: 1px solid var(--border-color, var(--background-modifier-border, #444));
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: var(--font-interface);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
+    transform: translateY(5px);
+    white-space: nowrap;
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.copy-protocol-tooltip.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
