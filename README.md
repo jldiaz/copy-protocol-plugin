@@ -54,6 +54,14 @@ The plugin includes a command called **Copy Protocol: Paste clipboard as copy-pr
    ```
 5. Clicking that link copies `git log --oneline` to your clipboard instantly.
 
+## Hover Previews
+
+You can preview the text that a copy link contains before actually copying it.
+
+- **To preview**: Hold `Ctrl` (or `Cmd` on macOS) while hovering your mouse over any `obsidian://copy` link or copy icon.
+- A custom, theme-aware tooltip will appear showing a snippet of the text to be copied (e.g., `Copy: "your command here"`).
+- This allows you to verify exactly what is going to be copied without needing to click it or inspect the markdown source.
+
 ## Installation
 
 You can install this plugin from the Community Plugins settings of Obsidian, or via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
