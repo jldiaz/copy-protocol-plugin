@@ -181,14 +181,24 @@ export default class CopyProtocolPlugin extends Plugin {
 		});
 
 		this.registerMarkdownPostProcessor((element, context) => {
-			const links = element.querySelectorAll('a.external-link');
+			const links = element.querySelectorAll('a.external-link, a.copy-protocol-link');
 			links.forEach(link => {
 				const href = link.getAttribute('href') || '';
 				if (href.startsWith('obsidian://copy')) {
-					link.classList.remove('external-link');
-					link.classList.add('copy-protocol-link');
+					if (link.classList.contains('external-link')) {
+						link.classList.remove('external-link');
+					}
+					if (!link.classList.contains('copy-protocol-link')) {
+						link.classList.add('copy-protocol-link');
+					}
 					link.removeAttribute('aria-label');
 					link.removeAttribute('data-tooltip-position');
+
+					// Add an inline icon span if it doesn't already have one
+					if (!link.querySelector('.copy-protocol-icon')) {
+						const span = link.createSpan({ cls: 'copy-protocol-icon' });
+						setIcon(span, 'copy');
+					}
 				}
 			});
 		});
